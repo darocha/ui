@@ -1,7 +1,9 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { Platform, InteractionManager } from 'react-native';
 import _ from 'lodash';
 
-import { View } from '@shoutem/ui';
+import { View, Spinner } from '@shoutem/ui';
 import { connectStyle } from '@shoutem/theme';
 
 import { parseHtml } from './services/HtmlParser';
@@ -19,9 +21,9 @@ const defaultElementSettings = {
 
 class Html extends Component {
   static propTypes = {
-    body: React.PropTypes.string.isRequired,
-    renderElement: React.PropTypes.func,
-    style: React.PropTypes.object,
+    body: PropTypes.string.isRequired,
+    renderElement: PropTypes.func,
+    style: PropTypes.object,
   };
 
   /**
@@ -49,7 +51,33 @@ class Html extends Component {
 
   constructor(props, context) {
     super(props, context);
+
+    this.refreshData = this.refreshData.bind(this);
     this.renderElement = this.renderElement.bind(this);
+
+    this.state = {
+      htmlTree: null,
+    };
+  }
+
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+      this.refreshData(this.props);
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.refreshData(nextProps, this.props);
+  }
+
+  refreshData(nextProps, props = {}) {
+    const { body: nextBody } = nextProps;
+    const { body } = props;
+
+    if (nextBody && nextBody !== body) {
+      const htmlTree = parseHtml(nextBody);
+      this.setState({ htmlTree });
+    }
   }
 
   /**
@@ -59,7 +87,7 @@ class Html extends Component {
    */
   getElementStyle({ tag }) {
     const { style } = this.props;
-    return _.get(style, tag);
+    return _.get(style, tag, {});
   }
 
   /**
@@ -82,7 +110,9 @@ class Html extends Component {
     // Custom renderElement for the specific Html implementation
     // has advantage over the "global". If custom renderElement rendered
     // a component that component will be used, otherwise fallback to "global".
-    if (!renderedElement) {
+    // Render element must be undefined to fallback to default,
+    // null is a valid RN type to render.
+    if (_.isUndefined(renderedElement)) {
       const ElementComponent = getElementProperty(element, 'component');
 
       if (!ElementComponent) {
@@ -103,9 +133,23 @@ class Html extends Component {
   }
 
   render() {
-    const { body, style } = this.props;
+    const { style, body } = this.props;
+    const { htmlTree } = this.state;
 
-    const htmlTree = parseHtml(body);
+    if (!body) {
+      return null;
+    }
+
+    if (!htmlTree) {
+      // Either still processing the Html or
+      // waiting for layout animations to complete
+      return (
+        <View styleName="md-gutter">
+          <Spinner styleName="sm-gutter" />
+        </View>
+      );
+    }
+
     const htmlRootElement = htmlTree.getRootNode();
 
     return (
@@ -117,12 +161,12 @@ class Html extends Component {
 }
 
 export const ElementPropTypes = {
-  childElements: React.PropTypes.array,
-  renderElement: React.PropTypes.func,
-  inlineStyle: React.PropTypes.string,
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node,
+  childElements: PropTypes.array,
+  renderElement: PropTypes.func,
+  inlineStyle: PropTypes.string,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
   ]),
 };
 

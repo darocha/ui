@@ -1,10 +1,10 @@
 import { setDefaultThemeStyle } from './init';
-import getTheme, { defaultThemeVariables } from './theme';
+import getTheme, { defaultThemeVariables, dimensionRelativeToIphone } from './theme';
 
 setDefaultThemeStyle();
 
 // Theme
-export { getTheme, defaultThemeVariables };
+export { getTheme, defaultThemeVariables, dimensionRelativeToIphone };
 
 // Components
 export { View } from './components/View';
@@ -12,7 +12,7 @@ export { Screen } from './components/Screen';
 
 export { NavigationBar } from './components/NavigationBar';
 export { NavigationBarAnimations } from './components/NavigationBar/NavigationBarAnimations';
-export { DropDownMenu } from './components/DropDownMenu';
+export { DropDownMenu, DropDownModal } from './components/DropDownMenu';
 export { Overlay } from './components/Overlay';
 
 export { ScrollView } from './components/ScrollView';
@@ -33,6 +33,7 @@ export { Switch } from './components/Switch';
 
 export { Video } from './components/Video';
 export { Image } from './components/Image';
+export { ImageBackground } from './components/ImageBackground';
 export { ImagePreview } from './components/ImagePreview';
 export { ImageGallery } from './components/ImageGallery';
 export { InlineGallery } from './components/InlineGallery';
@@ -43,6 +44,7 @@ export { PageIndicators } from './components/PageIndicators';
 export { default as RichMedia } from './components/RichMedia';
 export { Html } from './html';
 export { ShareButton } from './components/ShareButton';
+export { LinearGradient } from './components/LinearGradient';
 
 export {
   Heading,

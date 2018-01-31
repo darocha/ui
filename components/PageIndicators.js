@@ -1,7 +1,5 @@
-import React, {
-  Component,
-  PropTypes,
-} from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 import { connectStyle } from '@shoutem/theme';
 import { View } from './View';
@@ -63,7 +61,9 @@ class PageIndicators extends Component {
         indicatorStyle = 'selected';
       }
 
-      pageIndicators.push(this.renderPageIndicator(i, maxIndicatorsCount, activeIndex, indicatorStyle));
+      pageIndicators.push(
+        this.renderPageIndicator(i, maxIndicatorsCount, activeIndex, indicatorStyle)
+      );
     }
 
     return (

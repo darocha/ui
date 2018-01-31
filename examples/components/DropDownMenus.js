@@ -15,14 +15,6 @@ const options = [
     id: '7',
   },
   {
-    name: 'Lifestyle',
-    id: '7',
-  },
-  {
-    name: 'Food',
-    id: '8',
-  },
-  {
     name: 'Food',
     id: '8',
   },
@@ -80,7 +72,7 @@ export class DropDownMenus extends Component {
           />
         </Stage>
         <Stage title="Dropdown (inside a form group)">
-          <FormGroup>
+          <FormGroup styleName="stretch">
             <Caption>CATEGORY</Caption>
             <DropDownMenu
               styleName={selectedOptionForFormGroupDropdown.id ? '' : 'empty'}

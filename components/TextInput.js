@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { TextInput as RNTextInput } from 'react-native';
 
@@ -12,6 +13,7 @@ class TextInput extends Component {
     };
     delete style.placeholderTextColor;
     delete style.selectionColor;
+    delete style.underlineColorAndroid;
 
     return (
       <RNTextInput
@@ -19,6 +21,7 @@ class TextInput extends Component {
         style={style}
         placeholderTextColor={props.style.placeholderTextColor}
         selectionColor={props.style.selectionColor}
+        underlineColorAndroid={props.style.underlineColorAndroid}
       />
     );
   }
@@ -26,7 +29,7 @@ class TextInput extends Component {
 
 TextInput.propTypes = {
   ...RNTextInput.propTypes,
-  style: React.PropTypes.object,
+  style: PropTypes.object,
 };
 
 const AnimatedTextInput = connectAnimation(TextInput);
